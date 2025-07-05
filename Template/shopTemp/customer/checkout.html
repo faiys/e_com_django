@@ -1,0 +1,231 @@
+{% extends 'shopTemp/base.html' %}
+{% load static %}
+{% block title %} Checkout {% endblock %}
+{% block content %}
+<style type="text/css">
+	.mycard{
+		border-radius: 5px;
+		padding-top: 15px;
+	}
+	.fai{
+		box-shadow: 2px 2px 5px 5px #888888;
+	}
+	.img{
+		width: 50px;
+		height: 50px;
+	}
+	.form-control{
+		margin-bottom: 4px;
+	}
+	.order{
+		transform: translate(0px,250px);
+	}
+</style>
+<!-- Body -->
+<div class="container" style="margin-top:20px;">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row card">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="row">
+							<div class="col-md-10">
+								<form action="" method="" autocomplete="off" class="form-inline">
+									<input type="text" class="form-control" name="name" value="{{order.customers.name}}" placeholder="Name" readonly>
+									<input type="text" class="form-control" name="Phone" value="{{order.customers.phonenumber}}" placeholder="Phone number" readonly>
+								</form>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10">
+								<h3 style="color:blue;">Address</h3>
+								<hr style="margin-top: -5px;">
+								<form action="{% url 'checkout'%}" method="POST" class="form-inline">
+									{% csrf_token %}
+									<input type="text" class="form-control" name="street" placeholder="Street" value="{{shipping.street}}" required>
+									<input type="text" class="form-control" name="city" placeholder="City" value="{{shipping.city}}" required>
+									<input type="text" class="form-control" name="district" placeholder="District" value="{{shipping.district}}" required>
+									<input type="text" class="form-control" name="state" placeholder="State" value="{{shipping.state}}" required>
+									<input type="text" class="form-control" name="zip" placeholder="Zip Code" value="{{shipping.zipcode}}" required>
+									<input type="submit" name="submit" value="Update" class="form-control btn btn-info">
+									{% for i in messages%}
+									<p style="color:blue;">{{i}}</p>
+									{% endfor %}
+								</form>
+							</div>
+						</div>
+						<div class="row" style="margin-top:10px;">
+							<div class="col-md-10">
+				                <ul class="aa-head-top-nav-right list-unstyled">		
+					                <li><a href="" class="btn btn-primary" data-toggle="modal" data-target="#payment-modal">Make Payment</a></li>
+					            </ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 fai">
+					<div class="card">
+						<div class="row mycard">
+							<div class="row text-center">
+								<div class="col-md-2"> 
+								</div>
+								<div class="col-md-3"> 
+									Item Name
+								</div>
+								<div class="col-md-2"> 
+									Price
+								</div>
+								<div class="col-md-2"> 
+									Qty
+								</div>
+								<div class="col-md-2"> 
+									SubTotal
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="card-body col-md-12">
+									{% for item in item %}
+									<div class="row text-center" style="padding: 3px;">
+										<ul class="list-unstyled">
+											<li class="col-md-2">
+												<img class="img img-rounded" src="{{ item.store.productimage.url }}">
+											</li>
+											<li class="col-md-3">
+												<p class="">{{ item.store.productname }}</p>
+											</li>
+											<li class="col-md-2">
+												<p class="">{{ item.store.price }}</p>
+											</li>
+											<li class="col-md-2">
+												<p class="">
+													<span>
+														<a data-product ={{item.store.id}} data-action ="remove" class="update-cart">
+															<i class="fa fa-minus"></i>
+														</a>
+													</span>
+													{{ item.quantity }}
+													<span>
+														<a data-product ={{item.store.id}} data-action ="add" class="update-cart">
+															<i class="fa fa-plus"></i>
+														</a>
+													</span>
+												</p>
+											</li>
+											<li class="col-md-2">
+												<p >{{item.get_item_total}}</p>
+											</li>
+										</ul>
+									</div>	
+									{% endfor %}
+									<div class="row" >
+										<div class="mycard col-md-4">
+											<p class="text-center">Total Qty:<span style="margin: 10px;">{{order.get_item_count}}</span></p>
+											<p class="text-center">Total Price:<span style="margin: 10px;"><i class="fa fa-inr" style="color:black;"></i> {{order.get_item_cardtotal}}</span></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Make payment Modal -->  
+<div class="modal fade" id="payment-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">                      
+    <div class="modal-body">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4>Make Payment</h4>
+      <div class="row">
+      	<table class="table table-striped">
+      		<tr>
+      			<th>Totel Qty</th>
+      			<td>{{order.get_item_count}}</td>
+      			<th>Totel Price</th>
+      			<td>{{order.get_item_cardtotal}}</td>
+      		</tr>
+      	</table>
+      </div>	
+      <!-- <div>
+      	<a class="btn btn-warning" style="margin-left:40%;" href="{% url 'ordernow' %}" data-toggle="modal" data-target="#order-now" data-dismiss="modal">Order Now</a>
+      </div> -->
+      <div>
+      	<button class="btn btn-warning ordernow" style="margin-left:40%;" data-order = "{{order.id}}" data-action="False" data-toggle="modal" data-target="#order-now">Order Now</button>
+      </div>
+      <p id="alldata" style="color:red"></p>
+    </div>                        
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div>
+
+									<!--	iNVOICE IS WORKING BUT DUE TO SOME ISSUSE STOP THIS PROCESS -->
+<!-- order now Modal -->  
+<!-- <div class="modal fade order" id="now">
+<div class="modal-dialog">
+  <div class="modal-content">                      
+    <div class="modal-body">
+    	<div class="row">
+    		<div class="col-md-4">
+    			 <h4>Order ID : <span>#{{order.orderno}}</span></h4>
+    		</div>
+    		<div class="col-md-4">
+    			<a href="" class="btn btn-danger">Download Invoice</a>
+    		</div>
+    		<div class="col-md-4">
+    			<a href="{% url 'viewstores'%}" class="btn btn-primary">Go to Store</a>
+    		</div>
+    	</div>
+    </div>                        
+  </div>
+</div>
+</div>   -->
+
+<script type="text/javascript">
+	var	ordernow = document.getElementsByClassName('ordernow')
+	for (var i = 0; i<ordernow.length;i++) {
+		ordernow[i].addEventListener('click',function(){
+			var order_id = this.dataset.order
+			var action = this.dataset.action
+			console.log("order_id:",order_id,"action:",action)
+			console.log("User:",user)
+			if(user == "AnonymousUser"){
+				console.log("Please Login")
+			}else{
+				var url = '/ordernow/';
+				fetch(url,{
+			 			method: 'POST',
+			 			headers :{'Content-Type': 'application/json',
+			 								'X-CSRFToken' : csrftoken,
+			 							},
+			 			body: JSON.stringify({'order_id':order_id,'action':action})
+				})
+				.then(response =>{
+					return response.json()
+				})
+				.then(data =>{
+				console.log('data:',data)
+				//return json to html tempate
+				if(data.boolean == 'False'){
+					var div = document.getElementById('alldata').innerHTML = data.cart  
+				}
+				else{
+						alert("Transaction Id: #"+data.order_no);
+						document.location.href = '/viewstores/'
+					// change id attribute    ///Its not working properly
+					// document.getElementById("now").id = "order-now"
+					// document.getElementById("order-now")
+				}
+				// document.location.href = '/shopApp/viewstores/'
+				// location.reload()
+			})
+			}
+		})
+	}
+</script>
+{% endblock %}
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'shopTemp/base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block content %}
+<!-- Font awesome -->
+    <link href="{% static 'css/font-awesome.css'%}" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css'%}" rel="stylesheet">   
+    <!-- SmartMenus jQuery Bootstrap Addon CSS -->
+    <link href="{% static 'css/jquery.smartmenus.bootstrap.css'%}" rel="stylesheet">
+    <!-- Product view slider -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.simpleLens.css'%}">    
+    <!-- slick slider -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slick.css'%}">
+    <!-- price picker slider -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nouislider.css'%}">
+    <link href="{% static 'css/sequence-theme.modern-slide-in.css'%}" rel="stylesheet" media="all">
+
+    <!-- Main style sheet -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">    
+
+    <!-- Google Font -->
+   <!--  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'> -->
+<style type="text/css">
+	.container{
+		margin-left: 10px;
+		margin-right: 10px;
+		padding: 10px;
+		width: 100%;
+	}
+	.small-container{
+		max-width: 20%;
+		height: 300px;
+		display: inline-block;
+		text-align: center;
+		margin: 10px;
+		padding: 10px;
+		margin-right: 20px;
+	}
+	.img{
+		max-width: 100%;
+		height: 200px;
+	}
+	.card-title{
+		display: inline-flex;
+		color: red;
+	}
+	.card-body{
+		color:green;
+	}
+	
+</style>
+<!-- Body item.id-->
+<div class=" row container">
+	<div style="margin-left: 50px;">
+		{% if searchs.productname != null %}
+			<div class="small-container col-sm-3 well">
+				<div class="img">
+					<a href="{% url 'viewproduct' searchs.id %}"> 
+						<img class="img img-rounded" src="{{searchs.productimage.url}}" alt="{{searchs.productname}}">
+					</a>
+				</div>
+				<div class="card-header">
+					{{ searchs.productname }}
+				</div>	
+				<div class="card-title">
+					<span><i class="fa fa-inr" style="color:black;"></i></span>{{searchs.price}}
+				</div>
+				<div>
+					<button data-product ={{searchs.id}} data-action ="add" class="btn btn-primary update-cart" style="outline: none;">Add Card</button>
+				</div>
+			</div>
+		{% elif stores != null %}
+		<!-- <form action="{% url 'viewstores' %}" method=""> -->
+			{% for item in stores %}
+			{%if item.productimage%}
+			<div class="small-container col-sm-3 well">
+				<div class="img">
+					<a href="{% url 'viewproduct' item.id %}"> 
+						<img class="img img-rounded" src="{{item.productimage.url}}" alt="{{item.productname}}">
+					</a>
+				</div>
+				<div class="card-header">
+					{{ item.productname }}
+				</div>	
+				<div class="card-title">
+					<span><i class="fa fa-inr" style="color:black;"></i></span>{{item.price}}
+				</div>
+				<div>
+					<button data-product ={{item.id}} data-action ="add" class="btn btn-primary update-cart" style="outline: none;">Add Card</button>
+				</div>
+			</div>
+			{% endif %}
+			{% endfor %}
+		<!-- </form> -->
+		{% else %}
+			<p class="text-center small" style="margin-top:20px;">No Item Found</p>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

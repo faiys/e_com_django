@@ -1,0 +1,61 @@
+{% extends 'shopTemp/adminPage/index.html' %}
+{% load static %}
+{% block product %}
+<style type="text/css">
+  .names{
+    border: 1px solid black;
+  }
+</style>
+
+<form action="{% url 'stores'%}" method="POST" enctype="multipart/form-data" autocomplete="off"> 
+  {% csrf_token %}
+  <main class="h-full pb-16 overflow-y-auto">
+    <div class="container px-6 mx-auto grid">
+      <h2
+        class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+      >
+        Product
+      </h2>
+      <!-- General elements -->
+      <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <table cellpadding="5px">
+          <tr>
+            <th>
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Product Name</span>
+              </label>
+            </th>
+            <td>{{storeForm.productname}}</td>
+          </tr> 
+          <tr>
+            <th>
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Image</span>
+              </label>
+            </th>
+            <td  style="color:red;">{{storeForm.productimage}}</td>
+          </tr>
+          <tr>
+            <th>  
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Price</span>
+              </label>
+            </th>
+            <td>{{storeForm.price}}</td>
+          </tr>
+        </table>
+          <div class="block mt-4 text-sm">
+            <button
+              class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+            >Add
+            </button>
+          </div>
+        {% for i in messages%}
+        <p style="color: green;">{{i}}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+</form>
+{% endblock %}
+

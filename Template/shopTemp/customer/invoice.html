@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice</title>
+ <style type="text/css">
+
+    .header{
+        margin: 10px;
+        padding: 10px;
+    }
+    h4{
+        margin-top: 30spx;
+    }
+    .card-body{
+        margin: 10px;
+        padding: 10px;
+    }
+    .head{
+       
+    }
+</style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-card">
+            <h3><span><i class="glyphicon glyphicon-knight"></i></span> MFA Shopping</h3>
+            <h4>Invoice No : #<span>{{order.orderno}}</span></h4>
+            <p>Date: {{date}}</p>
+        </div>
+    </div>
+    <div class="card-body">
+        <hr>
+        <h4>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">Item</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">Price</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">Qty</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">Total</span>
+        </h4>
+        {% for i in item%}
+        <h5>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">{{i.store.productname}}</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">{{i.store.price}}</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">{{i.quantity}}</span>
+            <span style=" margin: 10px;padding: 10px;margin-left: 20px;">{{i.get_item_total}}</span>
+        </h5>
+        {% endfor %}
+        Total : {{order.get_item_cardtotal}}
+
+    </div>
+</body>
+</html>

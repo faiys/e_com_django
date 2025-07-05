@@ -1,0 +1,103 @@
+{% extends 'shopTemp/base.html' %}
+{% load static %}
+{% block title %} Order Items {% endblock %}
+{% block content %}
+<!-- css -->
+<style type="text/css">
+	.mycard{
+		border-radius: 5px;
+		/*box-shadow: 2px 1px 0px 0px #888888;*/
+		padding-top: 15px;
+		/*margin-right: 50px;*/
+	}
+	.mybtn{
+		padding-top: 15px;
+	}
+	.img{
+		width: 100px;
+		height: 100px;
+	}
+</style>
+<!-- Body -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="row mycard">
+					<div class="row text-center" style="margin-bottom: 5px;padding: 5px;font-size:18px;">
+						<div class="col-md-2"> 
+						</div>
+						<div class="col-md-2"> 
+							Item Name
+						</div>
+						<div class="col-md-2"> 
+							Price
+						</div>
+						<div class="col-md-2"> 
+							Qty
+						</div>
+						<div class="col-md-4"> 
+							SubTotal
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="card-body col-md-12">
+							{% for item in item %}
+							<div class="row text-center" style="margin-bottom: 5px;padding: 5px;">
+								<ul class="list-unstyled">
+									<li class="col-md-2">
+										<img class="img img-rounded" src="{{ item.store.productimage.url }}">
+									</li>
+									<li class="col-md-2">
+										<p class="">{{ item.store.productname }}</p>
+									</li>
+									<li class="col-md-2">
+										<p class="">{{ item.store.price }}</p>
+									</li>
+									<li class="col-md-2">
+										<p class="">
+											<span style="margin: 10px;">
+												<a data-product ={{item.store.id}} data-action ="remove" class="update-cart">
+													<i class="fa fa-minus"></i>
+												</a>
+											</span>
+											{{ item.quantity }}
+											<span style="margin: 10px;">
+												<a data-product ={{item.store.id}} data-action ="add" class="update-cart">
+													<i class="fa fa-plus"></i>
+												</a>
+											</span>
+										</p>
+									</li>
+									<li class="col-md-4">
+										<p >{{item.get_item_total}}</p>
+									</li>
+								</ul>
+							</div>	
+							{% endfor %}
+						</div>
+					</div>
+				</div> 
+			</div>
+			<div class="card">
+				<div class="row" style="margin-top: 10px">
+					<div class="col-md-2">
+					</div>	
+					<div class="mycard col-md-3">
+						<p class="text-center lead">Total Qty:<span style="margin: 10px;">{{order.get_item_count}}</span></p>
+					</div>
+					<div class="mycard col-md-3">
+						<p class="text-center lead">Total Price:<span style="margin: 10px;"><i class="fa fa-inr" style="color:black;"></i> {{order.get_item_cardtotal}}</span></p>
+					</div>
+					<div class="col-md-2 mybtn">
+						<a href="{% url 'checkout' %}" class="btn btn-info">Checkout</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

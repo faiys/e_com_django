@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+  <head>
+     <meta charset="utf-8">
+     <title>{% block title %} {% endblock %}</title>
+     <!-- Links -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <style type="text/css">
+        .active-purple-2 input.form-control[type=text]:focus:not([readonly]) {
+          border-bottom: 1px solid #ce93d8;
+          box-shadow: 0 1px 0 0 #ce93d8;
+        }
+        .active-purple .fa, .active-purple-2 .fa {
+          color: #ce93d8;
+        }
+        .panel{
+          margin-top:90px;
+        }
+     </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Nav header -->
+      <div class="nav navbar-fixed-top">
+        <div class="row">
+          <div class="container-fluid" style="background-color:white;">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="navbar-header navbar-brand">
+                  <span><i class="glyphicon glyphicon-knight"></i></span> MFA Shopping
+                </div>
+            </div>
+             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="navbar-header navbar-brand" style="color: red;">
+                 {% if user.is_authenticated %} Hello, {{request.user}} {% endif %}
+                </div>
+            </div>
+            <div class="nav navbar-brand navbar-right small">
+              <ul class="nav navbar-nav" style="padding:5px">
+                <li class="small" style="margin-right:15px;"><span><i class="fa fa-phone"></i></span> 
+                  76398-95244
+                </li>
+                <li class="small"><span><i class="fa fa-flag"></i></span>
+                 India
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <nav class="nav navbar-inverse col-lg col-md col-sm col-xs mynav">
+          <div class="container-fluid"> 
+              <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'viewstores' %}">Store</a></li>
+                <li><a href="{% url 'items' %}"><span><i class="fa fa-shopping-cart"></i>  Cart<span class="badge">{{cart_count}}</span></span></a></li>
+                {% if user.is_staff %}
+                <li><a href="{% url 'index' %}"><span><i class="fa fa-tachometer"></i></span>   Admin Dashboard</a></li>
+                {% endif %}
+              </ul>
+              <div class="nav navbar-right">
+                <ul class="nav navbar-nav">
+                  <li>
+                    <!-- Search form -->
+                    <form class="form-inline d-flex justify-content-center md-form form-sm active-purple-2 mt-2" style="margin-top:6px;" method="POST" action="{% url 'viewstores' %}">
+                      {% csrf_token%}
+                      <input class="form-control form-control-sm mr-3 w-75" type="search" placeholder="Search" aria-label="Search" name="search">
+                    </form>
+                  </li>
+                  <li><a href="{% url 'logout' %}"><span><i class="fa fa-sign-out"></i></span> logout</a></li>
+                  {% else %}
+                  <li><a href="{% url 'login' %}"><span><i class="glyphicon glyphicon-log-in"></i></span> Login</a></li>
+                  <li><a>||</a></li>
+                  <li><a href="{% url 'register' %}"><span><i class="glyphicon glyphicon-user"></i></span> Register</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <!-- end nav Header -->
+      <!-- Body -->
+      <div class="panel">
+         {% block content %}
+         {% endblock %}
+      </div>
+      <!--end body -->
+      <!-- Footer -->
+      {% block footer %}
+      {% endblock %}
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- My Js  -->
+    <script type="text/javascript" src="{% static 'js/faiyas-cart.js' %}"></script>
+    <script type="text/javascript">
+      var user = '{{request.user}}'
+      // console.log(user)
+
+      //When you call api in aother js to django you should call csrftoken in faicart.js file
+      function getToken(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+        }
+        return cookieValue;
+      }
+      const csrftoken = getToken('csrftoken');
+    </script>
+  </body>
+</html>

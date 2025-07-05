@@ -1,0 +1,54 @@
+{% extends 'shopTemp/base.html' %}
+{% load static %}
+{% block title %} Login {% endblock %}
+{% block content %}
+<!-- Body -->
+<div class="container well col-md-12" style="height:488px;">
+	<div class="card" style = "margin-top: 4%;">
+		<div class="card-title">
+			<h4 class="card-title mt-3 text-center">Login</h4>
+			<p class="text-center">Happy Shopping</p>
+		</div>
+		<div class="card-body ">
+			<form action="{% url 'login' %}" method="POST" autocomplete="off">
+			{%csrf_token%}
+				</div>
+				<div style="margin-left:42%">
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+						    <span class="input-group-text">
+						    	<i class="fa fa-user"></i>
+						    </span>
+						    {{login.username}}
+						</div>
+					</div>
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+						    <span class="input-group-text">
+						    	<i class="fa fa-phone"></i>
+						    </span>
+						    {{login.number}}
+						</div>
+					</div>
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+						    <span class="input-group-text">
+						    	<i class="fa fa-unlock-alt"></i>
+						    </span>
+						    {{login.password}}
+						</div>
+					</div>
+					<div class="form-group">
+			        	<button type="submit" class="btn btn-primary" style="margin-left: 70px"> Login  </button>
+				    </div> 
+				</div>    
+					<p class="text-center">New user?<a href="{% url 'register' %}">Sign up</a></p>  
+		    	</div>
+			</form>
+			{%for i in messages%}
+		    <p class="text-center text-danger">{{i}}</p>
+		    {%endfor%}
+		</div>
+ 	</div>
+</div>
+{% endblock %}
